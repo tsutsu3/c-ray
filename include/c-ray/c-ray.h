@@ -158,7 +158,7 @@ struct cr_scene_totals {
 	size_t instances;
 	size_t cameras;
 };
-CR_EXPORT struct cr_scene_totals cr_scene_totals(struct cr_scene *s_ext);
+CR_EXPORT struct cr_scene_totals cr_get_scene_totals(struct cr_scene *s_ext);
 
 struct cr_color {
 	float r;
@@ -186,7 +186,7 @@ struct cr_face {
 	int vertex_idx[MAX_CRAY_VERTEX_COUNT];
 	int normal_idx[MAX_CRAY_VERTEX_COUNT];
 	int texture_idx[MAX_CRAY_VERTEX_COUNT];
-	unsigned int mat_idx: 16;
+	uint16_t mat_idx;
 	bool has_normals;
 };
 

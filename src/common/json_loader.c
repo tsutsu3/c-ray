@@ -34,10 +34,10 @@ static struct transform parse_tform(const cJSON *data) {
 
 	//For translate, we want the default to be 0. For scaling, def should be 1
 	const float fallback = stringEquals(type->valuestring, "scale") ? 1.0f : 0.0f;
-	
+
 	const cJSON *x_in = cJSON_GetObjectItem(data, "x");
 	const float x = cJSON_IsNumber(x_in) ? x_in->valuedouble : fallback;
-	
+
 	const cJSON *y_in = cJSON_GetObjectItem(data, "y");
 	const float y = cJSON_IsNumber(y_in) ? y_in->valuedouble : fallback;
 
@@ -131,7 +131,7 @@ float getRadians(const cJSON *object) {
 
 static struct euler_angles parseRotations(const cJSON *transforms) {
 	if (!transforms) return (struct euler_angles){ 0 };
-	
+
 	struct euler_angles angles = { 0 };
 	const cJSON *transform = NULL;
 	cJSON_ArrayForEach(transform, transforms) {
@@ -147,13 +147,13 @@ static struct euler_angles parseRotations(const cJSON *transforms) {
 			angles.yaw = getRadians(transform);
 		}
 	}
-	
+
 	return angles;
 }
 
 static struct vector parse_location(const cJSON *transforms) {
 	if (!transforms) return (struct vector){ 0 };
-	
+
 	const cJSON *transform = NULL;
 	cJSON_ArrayForEach(transform, transforms) {
 		cJSON *type = cJSON_GetObjectItem(transform, "type");
@@ -161,7 +161,7 @@ static struct vector parse_location(const cJSON *transforms) {
 			const cJSON *x = cJSON_GetObjectItem(transform, "x");
 			const cJSON *y = cJSON_GetObjectItem(transform, "y");
 			const cJSON *z = cJSON_GetObjectItem(transform, "z");
-			
+
 			return (struct vector){
 				x ? x->valuedouble : 0.0,
 				y ? y->valuedouble : 0.0,
@@ -233,7 +233,7 @@ struct transform parse_composite_transform(const cJSON *transforms) {
 	if (!transforms) return tform_new();
 	//TODO: Pass mesh/instance name as targetName for logging
 	if (!cJSON_IsArray(transforms)) return parse_tform(transforms);
-	
+
 	struct transform composite = tform_new();
 
 	const cJSON *transform = NULL;
@@ -387,7 +387,7 @@ static void parse_mesh(struct cr_renderer *r, const cJSON *data, int idx, int me
 		cr_instance_set_transform(scene, new, parse_composite_transform(cJSON_GetObjectItem(instance, "transforms")).A.mtx);
 		cr_instance_bind_material_set(scene, new, instance_set);
 	}
-	
+
 done:
 
 	result.meshes.elem_free = ext_mesh_free;
@@ -423,10 +423,10 @@ static void parse_sphere(struct cr_renderer *r, const cJSON *data) {
 	}
 
 	cr_sphere new_sphere = cr_scene_add_sphere(scene, rad);
-	
+
 	// Apply this to all instances that don't have their own "materials" object
 	const cJSON *sphere_global_materials = cJSON_GetObjectItem(data, "material");
-	
+
 	const cJSON *instances = cJSON_GetObjectItem(data, "instances");
 	if (!cJSON_IsArray(instances)) return;
 	const cJSON *instance = NULL;
@@ -497,7 +497,7 @@ int parse_json(struct cr_renderer *r, struct cJSON *json) {
 	struct cr_scene *scene = cr_renderer_scene_get(r);
 	parse_prefs(r, cJSON_GetObjectItem(json, "renderer"));
 	parse_cameras(scene, cJSON_GetObjectItem(json, "camera"));
-	if (!cr_scene_totals(scene).cameras) {
+	if (!cr_get_scene_totals(scene).cameras) {
 		logr(warning, "No cameras specified, nothing to render.\n");
 		return -1;
 	}

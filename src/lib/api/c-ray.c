@@ -222,7 +222,7 @@ struct cr_scene *cr_renderer_scene_get(struct cr_renderer *ext) {
 	return (struct cr_scene *)scene;
 }
 
-struct cr_scene_totals cr_scene_totals(struct cr_scene *s_ext) {
+struct cr_scene_totals cr_get_scene_totals(struct cr_scene *s_ext) {
 	if (!s_ext) return (struct cr_scene_totals){ 0 };
 	struct world *s = (struct world *)s_ext;
 	return (struct cr_scene_totals){
@@ -614,7 +614,7 @@ struct cr_value_node *value_deepcopy(const struct cr_value_node *in) {
 			break;
 		default:
 			break;
-		
+
 	}
 	return out;
 }
