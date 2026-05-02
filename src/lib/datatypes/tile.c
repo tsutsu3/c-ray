@@ -134,7 +134,7 @@ static void reorder_top_to_bottom(struct render_tile **tiles) {
 	struct render_tile *temp = { 0 };
 	
 	for (unsigned i = 0; i < v_arr_len(*tiles); ++i)
-		v_arr_add(temp, *tiles[v_arr_len(*tiles) - i - 1]);
+		v_arr_add(temp, (*tiles)[v_arr_len(*tiles) - i - 1]);
 	
 	v_arr_free((*tiles));
 	*tiles = temp;
